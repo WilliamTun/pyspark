@@ -4,8 +4,7 @@ https://app.pluralsight.com/course-player?clipId=62383f93-458f-44a4-9cf8-d4c6545
 
 # EMR
 - managed cluster for big data anlaytics
-- can move or transform data in & out of aws databases
-  eg. dynamoDB / s3
+- can move or transform data in & out of aws databases eg. dynamoDB / s3
 
 
 # EMR architecture
