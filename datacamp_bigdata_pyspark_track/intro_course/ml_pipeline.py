@@ -98,8 +98,56 @@ All you need to do to handle string columns in ML applications is:
 ... and the Pipeline will take care of the rest.
 ''' 
 
+# ==== Carrier
 # Create a StringIndexer
 carr_indexer = StringIndexer(inputCol="carrier", outputCol="carrier_index")
 
 # Create a OneHotEncoder
-carr_encoder = OneHotEncoder(indexCol="carrier_index", outputCol="carrier_fact")
+carr_encoder = OneHotEncoder(inputCol="carrier_index", outputCol="carrier_fact")
+
+# ==== Destination
+# Create a StringIndexer
+dest_indexer = StringIndexer(inputCol="dest", outputCol="dest_index")
+
+# Create a OneHotEncoder
+dest_encoder = OneHotEncoder(inputCol="dest_index", outputCol="dest_fact")
+
+"""
+1. The last step in the Pipeline is to combine all of the columns 
+   containing our features into a single column. 
+2. This has to be done before modeling can take place 
+   because every Spark modeling routine expects the data 
+    to be in this form. 
+3. You can do this by storing each of the values 
+   from a column as an entry in a vector. 
+4. Then, from the model's point of view, 
+   every observation is:
+   a) vector that contains all of the information about it 
+   b) a label to classify.
+"""
+
+# Make a VectorAssembler
+vec_assembler = VectorAssembler(inputCols=["month", "air_time", "carrier_fact", "dest_fact", "plane_age"], outputCol="features")
+
+
+
+
+# ============= CREATE PIPELINE ===============
+'''
+Pipeline is a class in the pyspark.ml module 
+'''
+
+from pyspark.ml import Pipeline
+
+flights_pipeline = Pipeline(stages = [dest_indexer, dest_encoder,
+                                      carr_indexer, carr_encoder,
+                                      vec_assembler
+                                      ])
+
+# fit and transofmr the data
+piped_data = flights_pipe.fit(model_data).transform(model_data)
+
+
+# split the data into a 60-40 split
+training, test = piped_data.randomSplit([.6, .4])
+
