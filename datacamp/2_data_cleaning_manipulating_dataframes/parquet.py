@@ -1,4 +1,28 @@
 
+'''
+PARQUET FILES
+
+Problems with CSV files:
+1. schema is not automatically defined. 
+2. hard to handle nested data
+3. encoding formats are limited
+
+Spark cannot handle csv well:
+1. csv files are slow to parse
+2. FILES CANNOT BE SHARED BETWEEN WORKER NODES DURING IMPORT
+   = SLOW LOADING
+3. since schema is not defined, ALL DATA MUST BE READ, before infering schema
+   = SLOW LOADING
+
+
+What is parquet?
+1. parquet is a compressed columnar data format
+2. can be imported fast
+3. automatically stores schema info and handle data encoding 
+   - great for intermediate files during DAG flow
+
+'''
+
 
 # EXAMPLE 1: read parquet
 df = spark.read.format('parquet').load('filename.parquet')

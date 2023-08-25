@@ -18,6 +18,8 @@ important parameters
    to import are of similar size
 4. use well-defined schemas for import
     + provides validation during import
+    ... this will improve import performance!
+    (see ../1_data_cleaning/1_data_schema.py)
 
 
 # How to split files into multiple objects
@@ -30,4 +32,9 @@ important parameters
 2. Method 2: custom scripts eg. python
 3. Method 3: write out to parquet
 
+   ```
+   df_csv = spark.read.csv("data.csv")
+   df_csv.write_parquet("data.parquet")
+   df_parquet = spark.read.parquet("data.parquet")
+   ```
 
